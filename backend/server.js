@@ -3,7 +3,7 @@ import mongoose from "mongoose";
 import dotenv from "dotenv";
 import cors from "cors";
 
-// 1. IMPORT THE MODEL (This was missing!)
+// IMPORT THE MODEL
 import Booking from "./models/BookingModel.js";
 import bookingRoutes from "./routes/bookings.js";
 
@@ -25,36 +25,13 @@ app.use((req, res, next) => {
 
 app.use(express.json());
 
-// 2. MongoDB Connect
+// MongoDB Connect
 mongoose
     .connect(process.env.MONGO_URI)
     .then(() => console.log("✅ MongoDB connected"))
     .catch((err) => console.log(err));
 
-// 3. Test Database Write (Now this will work because 'Booking' is imported)
-mongoose.connection.once('open', async () => {
-    console.log("🔍 Testing database write...");
-    try {
-        const testBooking = new Booking({
-            bookingId: "test-2",
-            customerName: "Test User",
-            numberOfGuests: 2,
-            bookingDate: "tomorrow", // String is fine now if you updated the model
-            bookingTime: "7:00 PM",
-            cuisinePreference: "italian",
-        });
-
-        await testBooking.save();
-        console.log("✅ Test booking saved successfully!");
-
-        // Optional: Clean up test data immediately so your DB stays clean
-        // await Booking.deleteOne({ bookingId: "test-123" });
-    } catch (err) {
-        console.error("❌ Test booking failed:", err.message);
-    }
-});
-
-// 4. Routes
+// Routes
 app.use("/api/bookings", bookingRoutes);
 
 const PORT = process.env.PORT || 5050;

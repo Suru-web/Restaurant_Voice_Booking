@@ -18,17 +18,17 @@ export default defineAgent({
                 model: "assemblyai/universal-streaming",
                 language: "en",
             }),
-            // 1. LLM is just the model (Tools are NOT here anymore)
+            // Define LLM
             llm: new openai.LLM({
-                model: "qwen2.5:14b", // Use the model you pulled in Ollama
-                baseURL: "http://localhost:11434/v1", // Point to local server
+                model: "qwen2.5:14b", // Local Ollama model
+                baseURL: "http://localhost:11434/v1", // Points to local server
                 apiKey: "ollama",
             }),
             tts: new inference.TTS({
                 model: "cartesia/sonic-3",
                 voice: "9626c31c-bec5-4cca-baa8-f8ba9e84c8bc",
             }),
-            // 2. CRITICAL: This enables the agent to know when you stop speaking.
+            // This enables the agent to know when you stop speaking.
             turnDetection: new livekit.turnDetector.MultilingualModel(),
             vad: ctx.proc.userData.vad,
         });
@@ -38,14 +38,18 @@ export default defineAgent({
             usageCollector.collect(ev.metrics);
         });
         await session.start({
-            // 3. This matches the documentation pattern exactly:
+            // Instructions for LLM
             agent: new voice.Agent({
                 instructions: `
           You are a polite Restaurant table Booking Assistant.
-          Collect: Guests, Date, Time, Cuisine.
-          Once you have them, call 'createBooking'.
+          Collect: name, guests, date, time, cuisine.
+          Use the booking_date value when calling createBooking.
+          The backend will check weather for that specific date and recommend seating.
+          Collect the date even if the user expresses it naturally (e.g., "tomorrow", "next Friday", "this weekend"). 
+          DO NOT convert the date — pass it as the user says it. 
+          The system will convert natural language to a real ISO date.
         `,
-                // 👇 TOOLS GO HERE (Inside the Agent config)
+                // Tools to extract the required data
                 tools: {
                     createBooking: createBookingTool,
                 },
