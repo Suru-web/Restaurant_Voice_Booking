@@ -117,12 +117,24 @@ Example speech:
 
 ```json
 {
+  "_id": "69339a502739de4b1befe78c",
+  "bookingId": "bdb01cec-fdaf-4e7f-a6a6-193bb5466c54",
   "customerName": "Suraj",
-  "numberOfGuests": 4,
-  "bookingDate": "next Friday",
+  "numberOfGuests": 5,
+  "bookingDate": "2025-12-12T14:30:00.000+00:00",
   "bookingTime": "8pm",
-  "cuisinePreference": "Indian"
+  "cuisinePreference": "Indian",
+  "weatherInfo": {
+    "condition": "clouds",
+    "temp": 15.15,
+    "seating": "indoor",
+    "dateMatched": "2025-12-11T00:00:00.000Z"
+  },
+  "seatingPreference": "indoor",
+  "status": "confirmed",
+  "createdAt": "2025-12-06T02:52:00.273+00:00",
+  "__v": 0
 }
 ```
-
+My demo video link:- https://drive.google.com/file/d/1zXTrRTFTPXeN25mOXalHYVsY2wpH6Ek_/view?usp=share_link
 ###
